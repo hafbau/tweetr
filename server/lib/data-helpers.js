@@ -33,10 +33,11 @@ module.exports = function makeDataHelpers(db) {
     hasHandle: function(value, callback) {
       db.collection('users').find({'handle': `${value}`})
       .toArray(function(err, arr) {
+        let existingMatch;
         if (arr && (arr.length > 0)) {
-          const existingMatch = arr.find(user => user.handle === value);
-          callback(existingMatch);
+          existingMatch = arr.find(user => user.handle === value);
         }
+        callback(existingMatch);
       });
     },
 

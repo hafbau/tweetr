@@ -25,6 +25,21 @@ const charCounting = function(e) {
   }
 };
 
+// Hides dom element with id = modal when ESC is pressed.
+// Event to be bound on `document`
+const hideModalOnEsc = function(e) {
+  if (e.keyCode === 27) {
+    $('#modal').hide();
+  }
+};
+
+// Hides target on click
+const hideOnClick = function(e) {
+  if (this === e.target) {
+    $(this).hide();
+  }
+};
+
 const likesHandler = function(e) {
   const $this = $(e.target);
   const tweetID = $this.closest('article').data('this-tweet');
@@ -65,7 +80,7 @@ const showForm = function(formName) {
     $('#modal').css('display', 'flex')
     .find('form').hide().parent()
     .find(`.form-${formName}`).show()
-    .find('#email').focus();    
+    .find('[type="text"]')[0].focus();    
     return false
   }
 }

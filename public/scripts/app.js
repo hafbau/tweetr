@@ -28,11 +28,18 @@ $(function(){
   // Show login form
   $('.login').on('click', showLogin);
 
-  $('#modal').on('click', function(e) {
-    if (this === e.target) {
-      $(this).hide();
-    }
-  });
+  $('#modal form').on('submit', function(e) {
+    e.preventDefault();
+    let $this = $(this);
+    $.post($this[0].action, $this.serialize())
+    .then(function(message) {
+      console.log(message);
+    });
+  })
+
+  // Events binding for hiding #modal on click or ESC
+  $('#modal').on('click', hideOnClick);
+  $(document).on('keyup', hideModalOnEsc);
 
   // for pagination
   $(window).on('scroll', bindScroll);

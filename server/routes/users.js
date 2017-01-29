@@ -29,7 +29,7 @@ module.exports = function(DataHelpers) {
         req.session.userID = match._id;
         res.redirect("/");
       } else {
-        res.status(403).send(`your handle wasn't found, consider registering`);
+        res.status(403).send('your handle was not found, consider registering');
       }
     });
   });
