@@ -7,11 +7,25 @@
 
 // Document load IIFE
 $(function(){
+
+  (function() {
+    $.ajax({
+      url: `/gethandle`,
+      type: 'get',
+      contentType: 'text'
+    }).then(function(handle) {
+        loadTweets(handle);
+        if (handle) {
+          $('.login, .register').remove();
+          $('#nav-bar').append(loggedInNav(handle));
+        }
+    });
+  })();
+
   // Initial load of tweets - it maintains the windows.scroll binding
-  loadTweets();
 
   // Toggling the new tweet form with the compose button
-  $('#nav-bar button').on('click', composeToggler);
+  $('#nav-bar').on('click', '.compose', composeToggler);
 
   // character counting
   $('#tweet-text').on('keyup', charCounting);
@@ -32,8 +46,15 @@ $(function(){
     e.preventDefault();
     let $this = $(this);
     $.post($this[0].action, $this.serialize())
-    .then(function(message) {
-      console.log(message);
+    .fail(function(res) {
+      $this.find('.tooltiptext').text(res.responseText)
+      .css('opacity', 1).show();
+    }).success(function(handle) {
+      $('.login, .register').remove();
+      $('#nav-bar').append(loggedInNav(handle));
+      $this[0].reset();
+      $('#modal').hide();
+
     });
   })
 

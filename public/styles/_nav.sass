@@ -35,35 +35,43 @@ $light_color: #e8fdff
       width: $navbar_height
   
   .login,
+  .logout,
   .register,
-  button
-    border-radius: $border_radius
+  .compose,
+  span
     font-size: 1.5em
-    marigin-left: auto
+    margin-left: auto
     padding: 0.6em 1.5em
 
-  .login
+  .login,
+  .logout,
+  .register,
+  .compose
+    border-radius: $border_radius
+
+
+  .login,
+  .logout
     background-color: darken($primary_color, 0.5)
     border: none
     box-shadow: 0 0 0.3em $light_color
     color: $light_color
 
   .login:hover,
+  .logout:hover,
   .register:hover,
-  button:hover 
+  .compose:hover 
     color: #333
     background-color: #eee
     box-shadow: 0 0 0.8em #333
 
   .register,
-  button
+  .compose
     background-color: $light_color
     border: none
     box-shadow: 0 0 0.3em $shadow_color
     color: $primary_color
 
+  .compose,
   .register
     margin-right: 0.8rem
-
-  button
-    display: none

@@ -6,8 +6,12 @@ const PORT          = 3000;
 const express       = require("express");
 const bodyParser    = require("body-parser");
 const app           = express();
+const cookieSession = require("cookie-session");
 
+app.use(cookieSession({signed: false}));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 app.use(express.static("public"));
 
 const MongoClient = require("mongodb").MongoClient;

@@ -1,6 +1,6 @@
-const renderTweets = (tweetsArr, current) => {
+const renderTweets = (tweetsArr, handle, current) => {
   tweetsArr.forEach((tweetObj) => {
-    const $tweet = createTweetElement(tweetObj);
+    const $tweet = createTweetElement(tweetObj, handle);
     if (current) {
       $('#tweets').prepend($tweet);
     } else {
@@ -24,13 +24,13 @@ const validateTweet = (content) => {
 const paginate = () => {
   let page = 1;
   
-  return function() {
+  return function(handle) {
     $.ajax({
       url: `/tweets?page=${page}`,
       type: 'get',
       contentType: 'json'
     }).then(function(response) {
-        renderTweets(response);
+        renderTweets(response, handle);
     });
     page++;
   }

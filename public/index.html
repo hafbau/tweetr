@@ -27,7 +27,6 @@
       </a>
       <a href="#0" class="register">Register</a>
       <a href="#0" class="login">Log in</a>
-      <button class="radius-general float-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Compose</button>
     </nav>
 
     <!-- Page-specific (main) content here -->
@@ -38,13 +37,16 @@
           <label class="no-display" for="name">Your handle here</label>
           <input type="text" name="name" placeholder="full name here" id="name" required>
           <label class="no-display" for="handle">Your handle here</label>
-          <input type="text" name="handle" placeholder="@yourHandle" id="handle" required>
+          <div class="tooltip">
+            <input type="text" name="handle" placeholder="@yourHandle" id="handle">
+            <span class="tooltiptext"></span>
+          </div>
           <label class="no-display" for="password">Password here</label>
           <input type="password" placeholder="***" name="password" id="password" required>
           <button>Register</button>
           <span class="form-info">
             Have an account?
-            <a href="#0">Login</a>
+            <a href="#0" class="login">Login</a>
           </span>
         </form>
         <form method="post" action="/login" class="form-login">
@@ -58,7 +60,7 @@
           <button>Login</button>
           <span class="form-info">
             No account yet?
-            <a href="#0">Register</a>
+            <a href="#0" class="register">Register</a>
           </span>
         </form>
       </section>

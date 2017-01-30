@@ -69,7 +69,7 @@ const newTweetHandler = function(e) {
         $('.new-tweet form')[0].reset();
         $('.flash').text('').hide();
         $('.counter').text('140');
-        renderTweets([tweet], true);
+        renderTweets([tweet], tweet.user.handle, true);
     });
   }
 };

@@ -1,4 +1,6 @@
 $spacing_unit: 1rem
+$error_back_color: #efcdcd
+$error_text_color: #f70000
 
 #modal
   align-items: center
@@ -17,6 +19,50 @@ $spacing_unit: 1rem
     font-weight: 300
     padding-bottom: $spacing_unit
     margin: $spacing_unit 0
+  
+  /* Tooltip container */
+  .tooltip 
+    position: relative
+  
+
+  /* Tooltip text */
+  .tooltip .tooltiptext 
+    display: none
+    max-width: 50%
+    background-color: $error_back_color
+    color: $error_text_color
+    text-align: center
+    padding: 5px 10px
+    border-radius: $border_radius
+
+    /* Position the tooltip text */
+    position: absolute
+    z-index: 1
+    bottom: 70%
+    left: 10%
+
+    /* Fade in tooltip */
+    opacity: 0
+    transition: opacity 1s
+  
+
+  /* Tooltip arrow */
+  .tooltip .tooltiptext::after 
+    content: ""
+    position: absolute
+    top: 100%
+    left: 50%
+    margin-left: -10px
+    border-width: 10px
+    border-style: solid
+    border-color: $error_back_color transparent transparent transparent
+  
+
+  // Show the tooltip text when you mouse over the tooltip container
+  // .tooltipshow 
+  //   visibility: visible
+  //   opacity: 1
+  
 
   button
     background-color: $primary_color

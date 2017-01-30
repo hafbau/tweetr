@@ -5,22 +5,24 @@ const userHelper    = require("../lib/util/user-helper");
 const express       = require('express');
 const tweetsRoutes  = express.Router();
 
-const cookieSession = require("cookie-session");
-tweetsRoutes.use(cookieSession({signed: false}));
+// const cookieSession = require("cookie-session");
+// tweetsRoutes.use(cookieSession({signed: false}));
 
 module.exports = function(DataHelpers) {
   
   // updating tweet's likes counter
   tweetsRoutes.post("/:tweet/likes", function(req, res) {
-    const userID = req.userID || (`u-${userHelper.generateRandomString()}`);
+    const handle = req.session.userHandle;
     const tweetID = req.params.tweet;
-    if (!req.session.userID) {
-      req.session.userID = userID;
+    if (handle) {
+      DataHelpers.updateTweetAction(tweetID, handle, function(err, arr) {
+        const likes = arr[0]['likes'];
+        const len = likes ? likes.length : 0;
+        res.status(200).send(`${len}`);
+      });
+    } else {
+      res.status(403).send();
     }
-    
-    DataHelpers.updateTweetAction(tweetID, userID, function(err, arr) {
-      res.status(200).send(`${arr[0]['likes'].length}`);
-    })
   })
 
   tweetsRoutes.get("/", function(req, res) {
@@ -39,23 +41,33 @@ module.exports = function(DataHelpers) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
+    const userHandle = req.session.userHandle;
+    if (userHandle) {
+      DataHelpers.hasHandle(userHandle, function(match) {
+        const user = {
+          name: match.name,
+          handle: match.handle,
+          avatars: match.avatars 
+        };
+        const tweet = {
+          user: user,
+          content: {
+            text: req.body.text
+          },
+          created_at: Date.now()
+        };
 
-    const user = req.body.user ? req.body.user : userHelper.generateRandomUser();
-    const tweet = {
-      user: user,
-      content: {
-        text: req.body.text
-      },
-      created_at: Date.now()
-    };
-
-    DataHelpers.saveTweet(tweet, (err) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-      } else {
-        res.status(201).send(tweet); // my edit performance tweaking to avoid loading the whole db everytime a new tweet is created
-      }
-    });
+        DataHelpers.saveTweet(tweet, (err) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            res.status(201).send(tweet); // avoiding loading all db
+          }
+        });
+      });
+    } else {
+      res.status(403).json({ error: err.message });
+    }
   });
 
   return tweetsRoutes;

@@ -5,9 +5,6 @@ const userHelper    = require("../lib/util/user-helper");
 const express       = require('express');
 const usersRoutes  = express.Router();
 
-const cookieSession = require("cookie-session");
-usersRoutes.use(cookieSession({signed: false}));
-
 module.exports = function(DataHelpers) {
   // USER routes
   usersRoutes.post("/register", (req, res) => {
@@ -17,8 +14,8 @@ module.exports = function(DataHelpers) {
       } else {
         const user = userHelper.createUser(req.body);
         DataHelpers.saveUser(user);
-        req.session.userID = user._id;
-        res.redirect("/");
+        req.session.userHandle = user.handle;
+        res.status(200).send(user.handle);
       }
     })
   });
@@ -26,19 +23,26 @@ module.exports = function(DataHelpers) {
   usersRoutes.post("/login", (req, res) => {
     DataHelpers.hasHandle(req.body.handle, function(match) {
       if (match) {
-        req.session.userID = match._id;
-        res.redirect("/");
+        req.session.userHandle = match.handle;
+        res.status(200).send(match.handle);
       } else {
         res.status(403).send('your handle was not found, consider registering');
       }
     });
   });
 
-
   usersRoutes.post("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
   });
+
+usersRoutes.get("/gethandle", (req, res) => {
+  if (req.session && req.session.userHandle) {
+    res.status(200).send(req.session.userHandle);
+  } else {
+    res.status(201).send();
+  }
+});
 
   return usersRoutes;
 

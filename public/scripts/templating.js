@@ -5,7 +5,10 @@ const escape = (str) => {
   return div.innerHTML;
 };
 
-const createTweetElement = (tweetData) => {
+const createTweetElement = (tweetData, handle) => {
+  const likes = tweetData.likes;
+  const likesCount = likes ? likes.length : 0;
+  const off = (likes && likes.includes(handle)) ? 'off' : '';
   let html = `<article class="radius-general" data-this-tweet="${tweetData._id}">
                 <header>
                   <img alt="avatar" class="tweet-avatar" src="${escape(tweetData.user.avatars.regular)}" 
@@ -19,11 +22,21 @@ const createTweetElement = (tweetData) => {
                 <footer>
                   <time datetime="${(new Date(tweetData.created_at)).toUTCString()}">${formatTime(tweetData.created_at)}</time>
                   <ul class="tweet-actions float-right">
-                    <li><i class="fa fa-flag" aria-hidden="true" data-tweetr-action-type="flags" data-tweetr-action-state="on">0</i></li>
-                    <li><i class="fa fa-retweet" aria-hidden="true" data-tweetr-action-type="shares" data-tweetr-action-state="on">0</i></li>
-                    <li><i class="fa fa-heart" aria-hidden="true" data-tweetr-action-type="likes" data-tweetr-action-state="on">0</i></li>
+                    <li><i class="fa fa-flag" aria-hidden="true" data-tweetr-action-type="flags">0</i></li>
+                    <li><i class="fa fa-retweet" aria-hidden="true" data-tweetr-action-type="shares">0</i></li>
+                    <li><i class="fa fa-heart ${off}" aria-hidden="true" data-tweetr-action-type="likes">${likesCount}</i></li>
                   </ul>
                 </footer>
               </article>`
   return $(html);
 };
+
+const loggedInNav = (handle) => {
+  const html = `<span>${handle}</span>
+      <button class="compose radius-general float-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Compose</button>
+      <form method="post" action="/logout">
+        <button class="logout">Logout</button>
+      </form>`;
+
+  return $(html);
+}
