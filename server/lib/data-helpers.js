@@ -47,7 +47,6 @@ module.exports = function makeDataHelpers(db) {
     updateTweetAction: function(tweetID, userID, callback) {
       db.collection('tweets').find({_id: ID(tweetID)}).toArray(function(err, actionArr) {
         const tweet = actionArr[0];
-        console.log('this tweet is owned by ',tweet.user.handle);
         if (tweet.user.handle !== userID) {
           if (tweet['likes']) {
             if (tweet['likes'].includes(userID)) {
